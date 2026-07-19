@@ -1,182 +1,206 @@
 # Baby Tools World
 
-This repository contains the source code of the 'Baby Tools World' which is a simple full stack shop application written in Python using Django 6.
-The project was developed for educational purposes only and therefore has no claim to feature completeness, or only minimal claims regarding application security, user experience, or design.
+Baby Tools World is a Django 6 sample shop application built for educational purposes.
+It demonstrates a simple full-stack setup with products, user authentication, and test coverage.
 
 > [!NOTE]
-> This project assumes you already know the python programming language
+>
+> This project is intended for learning and development use.
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Usage](#usage)
+  - [Linting and Formatting](#linting-and-formatting)
+  - [Testing](#testing)
+  - [WSGI Notes](#wsgi-notes)
+  - [Seeding Data](#seeding-data)
+  - [Containerization](#containerization)
+- [Project Structure](#project-structure)
+  - [Apps Overview](#apps-overview)
 
 ## Prerequisites
 
-In order to seamlessly interact with the repository and the software it contains you need to following tools preinstalled:
+Install the following tools before you start:
 
-- Python Interpreter
-- OCI-Compliant Container Engine (e.g. podman, docker, etc.)
-- Editor/IDE of your choice (VSC, PyCharm, etc.)
+- Git
+- Docker
 
 ## Quickstart
 
-In order to quickly get started with the project follow these steps:
+Clone the repository and navigate into it.
 
-1. clone the repository
-1. nagivate to the repository
-1. (optional) create a virtual environment with `python -m venv my-venv`
-    1. activate the virtual environment:
-        - on Windows run: `my-venv/Scripts/activate`
-        - on MacOS/Linux run: `source my-venv/bin/activate`
-1. install the project dependencies with `pip install -r requirements.txt`
-1. configure required application environment variables
-    - `cp example.env .env`
-1. go to the `src` directory via `cd src`
-1. prepare the database (create and apply migrations)
-    1. `python manage.py makemigrations`
-    1. `python manage.py migrate`
-1. start the application with `python manage.py runserver`
-1. verify the application is running by visiting `localhost:8000`
-1. (optional) create a superuser by running: `python manage.py createsuperuser`
+Clone the Git repository:
 
-## Project Structure
+```bash
+git clone git@github.com:philippemoluh-byte/baby-tools-world.git
+```
 
-- `.gitlab`: GitLab specific project files
-- `.github`: GitHub specific project files
-- `src`: application source code, containing the django project, apps, and other files
-- `requirements.txt`: the project dependencies
+Navigate to the repository:
 
-### Apps Overview
+```bash
+cd baby-tools-world
+```
 
-The project is modularized into several apps:
+Configure the required application environment variables:
 
-- `products`: Manages product listings and categories
-- `users`: Handles user authentication and registration.
+```bash
+cp example.env .env
+```
 
-Each app has its own `models.py`, `views.py`, `urls.py`, and `admin.py` files to encapsulate its functionality.
+Edit the environment variables:
+
+```bash
+ # Edit the .env file
+ nano .env
+
+ # Set the following variable
+ BTW_SECRET_KEY=<your_secret>
+
+ # True for development, false for other environments
+ DEBUG=<your_boolean_value>
+ ALLOWED_HOSTS=<your_ip>
+
+ # Database settings
+ DB_ENGINE=<your_db_engine>
+ DB_NAME=<your_db_name>
+ DB_USER=<your_db_user>
+ DB_PASSWORD=<your_db_password>
+ DB_HOST=<your_db_host>
+ DB_PORT=<your_db_port>
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv my-venv
+```
+
+Activate the virtual environment:
+
+```bash
+# Windows (PowerShell)
+my-venv\Scripts\Activate.ps1
+
+# macOS/Linux
+source my-venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Apply database migrations:
+
+```bash
+cd src
+python manage.py makemigrations
+python manage.py migrate
+```
+
+Run the development server:
+
+```bash
+python manage.py runserver
+```
+
+Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+Optionally, create an admin user:
+
+```bash
+python manage.py createsuperuser
+```
 
 ## Usage
 
-In this section you can read about the project a bit more in detail.
+### Linting and Formatting
 
-### Configuration
-
-To configure the project, follow these steps:
-
-1. Copy the example environment file to the `src` directory: `cp example.env src/.env`.
-    - the file needs to be stored next to the manage.py file in order to function properly.
-    Other locations might also work but there is no guarantuee, and in last consequence you will need to update to project correspondingly.
-2. Open your `src/.env` and set the required environment variables:
-    - `ALLOWED_HOSTS`: provide a list of comma-separated values for the allowed host configuration => Defaults to `'localhost, 127.0.0.1, 0.0.0.0'`
-    - `DEBUG`: Set to `True` for development or `False` for production. Defaults to `True`
-
-### Running the linting tools
-
-> [!tip]
-> In order to run the routines below the required packages must be installed (done after running `pip install -r requirements.txt`).
->
-> If you are using a virtual environment this also needs to be activated.
-
-To run code-quality checks that check the code-style and formatting you can run the following commands in your terminal:
+Run these commands before creating a commit:
 
 ```bash
-# to format the python code
+# from repository root
 black .
-# to apply correct sorting for imports
 isort .
+
+# from src (uses src/.flake8)
+cd src
+flake8 .
 ```
 
-#### When to run this
-
-You should check the code-style before pushing the commits to the remote repository.
-In case you forgot it and somehow violated a rule, the CI workflow will fail -> run linting, add changes, commit, push -> see if pipeline passes
-
-> [!note]
-> If a CI workflow fails, you should check the logs to find out where the workflow failed and what was the reason for this failure.
+If CI fails on style checks, run the commands above locally, commit the changes, and push again.
 
 ### Testing
 
-This project contains tests for the corresponding apps in the respective packages.
-Tests in Django can either be located in a `tests.py` file within a django-app, or you could also have a module named `tests` (essentially a folder with an `__init__.py` file).
-
-> [!TIP]
-> The django testrunner will by default discover tests by finding all python files that contain the word `test` in their name, e.g. `test.py`, `test_model.py`, or similar.
-
-Example Structure:
-
-```console
-baby-tool-world/src/products
-├───management
-├───migrations
-├───templates
-└───tests <-- this is the module
-      ├───__init__.py
-      ├───test_category_model.py <-- this is a test file
-      └───test_category_model.py <-- this is a test file too
-```
-
-#### Running tests
-
-To run the tests with the `django testrunner` you can use the following command:
-
-- `python manage.py test`, you need to run this in the folder where `manage.py` lives -> `src`
-
-For more information about testing, refer to the testing documentation in this repository, see [testing documentation](./docs/testing.md)
-
-### Running with a WSGI Server
-
-**WSGI** (Web Server Gateway Interface) is a specification that defines a standard interface between web servers and Python web applications or frameworks.
-It acts as a bridge, allowing web servers to communicate with Python applications in a consistent manner.
-
-In Django deployments, WSGI is used to serve the application in a production environment.
-It enables the web server (e.g., Gunicorn, uWSGI, or Apache with mod_wsgi) to forward
-requests to the Django application and return responses to the client. This ensures that
-the application can handle HTTP requests efficiently and reliably in a scalable setup.
-
-> `gunicorn` and `waitress` are similar tools and can be used for the same purpose,
-> but sometimes running `gunicorn` on windows results in problems that can be circumvented by using `waitress` instead.
->
-> See the following [quote](https://docs.gunicorn.org/en/stable/index.html) from the official gunicorn website:
->> Gunicorn ‘Green Unicorn’ is a Python WSGI HTTP Server for UNIX.
-
-For more information about WSGI and its configuration, see the [wsgi documentation](./docs/wsgi.md).
-
-### Seeding the application with data
-
-This section will guide you through the process of providing an initial seed to the application.
-
-To initially seed the application you can run the management command `seed_db` to fill the database with some categories and testing products.
-
-In order to run that comand go the the directory, where your `manage.py` file is stored and run the following command:
+Run tests from the src directory:
 
 ```bash
+cd src
+python manage.py test
+```
+
+More details are available in [docs/testing.md](./docs/testing.md).
+
+### WSGI Notes
+
+For production-like serving, you can use a WSGI server such as gunicorn.
+On Windows, waitress can be a practical alternative.
+
+More details: [docs/wsgi.md](./docs/wsgi.md).
+
+### Seeding Data
+
+To populate the database with demo categories and products:
+
+```bash
+cd src
 python manage.py seed_db
 ```
 
 ### Containerization
 
-This section should give a brief overview about the containerization of the django app.
-
 > [!NOTE]
-> This guide assumes you are using the docker engine, docker desktop, or anything similar.
-> For other tools that are compliant with the OCI spec the commands will be slightly different, but more or less the same.
+>
+> Make sure you run the following commands in the directory where the Dockerfile is located.
 
-#### Build an image
-
-You can build the container image by running the following command in your terminal:
+Build the image:
 
 ```bash
-# use -t to provide a tag together with the image name
-# -> baby-tools-world is the image name, 'local' is the tag
 docker build -t baby-tools-world:local .
 ```
 
-#### Run a container
-
-To start a container based on the image, use the following command in your terminal:
+Run the container:
 
 ```bash
 docker run --rm -it -p 8000:8000 baby-tools-world:local
 ```
 
-In order to overwrite predefined environment configuration in the app, you can specify an `.env` file by adding the option to the command like below:
+Run the container with an environment file:
 
 ```bash
 docker run --rm -it -p 8000:8000 --env-file .env baby-tools-world:local
 ```
+
+## Project Structure
+
+```text
+baby-tools-world/
+|- src/
+|  |- btw_app/      # Django project settings and URLs
+|  |- products/     # Catalog, categories, tags, reviews
+|  |- users/        # Authentication and user flows
+|  |- templates/    # Shared templates
+|  |- static/       # Static assets
+|  `- manage.py
+|- docs/            # Project documentation
+|- requirements.txt # Python dependencies
+`- README.md
+```
+
+### Apps Overview
+
+- products: catalog and review domain logic
+- users: authentication, forms, and user views
