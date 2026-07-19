@@ -22,17 +22,18 @@ class Category(models.Model):
         ordering = ["name"]
         verbose_name_plural = "Categories"
 
+
 # Tag model represents a label or keyword associated with products
 class Tag(models.Model):
     name = models.CharField(max_length=30, unique=True, null=False, blank=False)  # Name of the tag, must be unique
-    created_at = models.DateTimeField(auto_now_add=True) # Records the date and time when a Tag instance is created.
-    updated_at = models.DateTimeField(auto_now=True) # Updates the date and time whenever a Tag instance is modified
+    created_at = models.DateTimeField(auto_now_add=True)  # Records the date and time when a Tag instance is created.
+    updated_at = models.DateTimeField(auto_now=True)  # Updates the date and time whenever a Tag instance is modified
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ["name"]   # Default ordering of tags by name
+        ordering = ["name"]  # Default ordering of tags by name
         verbose_name_plural = "Tags"
 
 
