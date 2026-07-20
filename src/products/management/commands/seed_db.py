@@ -2,7 +2,12 @@ from django.core.management.base import BaseCommand
 
 from products.models import Category, Product
 
-categories_list = [("boys", "", "boys"), ("girls", "", "girls"), ("toys", "", "toys"), ("outdoor", "", "outdoor")]
+categories_list = [
+    ("boys", "", "boys"),
+    ("girls", "", "girls"),
+    ("toys", "", "toys"),
+    ("outdoor", "", "outdoor"),
+]
 products = [
     {
         "category": "boys",
@@ -127,7 +132,7 @@ class Command(BaseCommand):
                 # Check if category already exists
                 if Category.objects.filter(name=category[0]).exists():
                     self.stdout.write(
-                        self.style.WARNING(f"Category '{category[0]}' already exists. Skipping creation.")
+                        self.style.WARNING(f"Category '{category[0]}' " "already exists. Skipping creation.")
                     )
                     continue
                 # Create a new category
@@ -148,14 +153,16 @@ class Command(BaseCommand):
                 category = Category.objects.filter(name=product["category"]).first()
                 if not category:
                     self.stdout.write(
-                        self.style.ERROR(f"Category '{product['category']}' does not exist. Skipping product creation.")
+                        self.style.ERROR(
+                            f"Category '{product['category']}' " "does not exist. " "Skipping product creation."
+                        )
                     )
                     continue
 
                 # Check if product already exists
                 if Product.objects.filter(name=product["name"]).exists():
                     self.stdout.write(
-                        self.style.WARNING(f"Product '{product['name']}' already exists. Skipping creation.")
+                        self.style.WARNING(f"Product '{product['name']}' " "already exists. " "Skipping creation.")
                     )
                     continue
 
