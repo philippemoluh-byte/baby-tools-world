@@ -188,6 +188,7 @@ docker run --rm -it -p 8000:8000 --env-file .env baby-tools-world:local
 
 ```text
 baby-tools-world/
+|- Baby-Tools-World-Checkliste.pdf # Project requirement checklist
 |- src/
 |  |- btw_app/      # Django project settings and URLs
 |  |- products/     # Catalog, categories, tags, reviews
