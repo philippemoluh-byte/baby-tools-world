@@ -8,8 +8,10 @@ from .models import Category, Comment, Product
 
 def product_list(request, category_slug=None):
     categories = Category.objects.all()
-    products = Product.objects.select_related("category").prefetch_related("tags").annotate(
-        avg_rating=Avg("comments__rating"), total_ratings=Count("comments")
+    products = (
+        Product.objects.select_related("category")
+        .prefetch_related("tags")
+        .annotate(avg_rating=Avg("comments__rating"), total_ratings=Count("comments"))
     )
     if category_slug:
         products = products.filter(category__slug=category_slug)
